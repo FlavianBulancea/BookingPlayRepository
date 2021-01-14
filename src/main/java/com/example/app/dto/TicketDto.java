@@ -13,6 +13,6 @@ public class TicketDto {
     private Long customerId;
     private Long theaterId;
     private Long playId;
-    private Long seat_number;
+    private Long seatNumber;
     private Float price;
 }
