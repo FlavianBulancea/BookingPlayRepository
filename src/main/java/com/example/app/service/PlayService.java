@@ -30,4 +30,16 @@ public class PlayService {
 
         return playDtos;
     }
+
+    public List<PlayDto> getAllSorted() throws NoPlayFoundException {
+
+        List<PlayDto> playDtos = playRepository.findByOrderByStartAsc().stream()
+                .map(play -> playMapper.modelToDto(play))
+                .collect(Collectors.toList());
+
+        if (playDtos.size() == 0)
+            throw new NoPlayFoundException();
+
+        return playDtos;
+    }
 }

@@ -30,4 +30,15 @@ public class PlayController {
         }
 
     }
+
+    @GetMapping("/sorted")
+    public ResponseEntity<List<PlayDto>> getAllSorted() {
+
+        try {
+            return new ResponseEntity<>(playService.getAllSorted(), new HttpHeaders(), HttpStatus.OK);
+        } catch (NoPlayFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+    }
 }
