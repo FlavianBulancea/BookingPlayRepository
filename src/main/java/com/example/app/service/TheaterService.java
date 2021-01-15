@@ -3,6 +3,7 @@ package com.example.app.service;
 import com.example.app.dto.TheaterDto;
 import com.example.app.exception.theater.NoTheaterFoundException;
 import com.example.app.mapper.TheaterMapper;
+import com.example.app.model.Theater;
 import com.example.app.repository.TheaterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
