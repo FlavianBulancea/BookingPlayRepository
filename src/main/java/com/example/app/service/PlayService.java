@@ -47,7 +47,7 @@ public class PlayService {
         return playDtos;
     }
 
-    public PlayDto save(PlayDto playDto) {              //throws any error ???
+    public PlayDto save(PlayDto playDto) {              //throws any error (name etc..) ???
 
         Play play = playMapper.dtoToModel(playDto);
         play = playRepository.save(play);

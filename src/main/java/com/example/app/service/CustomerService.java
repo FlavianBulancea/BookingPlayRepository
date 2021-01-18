@@ -31,4 +31,3 @@ public class CustomerService {
         return customerDtos;
     }
 }
-// TODO: 15-Jan-21 remove duplicate code; mapping lists on all services and controllers !

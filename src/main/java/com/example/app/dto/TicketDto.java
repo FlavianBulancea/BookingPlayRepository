@@ -4,15 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TicketDto {
 
     private Long id;
+
     private Long customerId;
+
     private Long theaterId;
+
     private Long playId;
+
     private Long seatNumber;
+
     private Float price;
 }

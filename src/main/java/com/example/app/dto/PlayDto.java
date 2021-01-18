@@ -12,8 +12,12 @@ import java.sql.Timestamp;
 public class PlayDto {
 
     private Long id;
+
     private Long theaterId;
+
     private String name;
+
     private Timestamp start;
+
     private Timestamp end;
 }

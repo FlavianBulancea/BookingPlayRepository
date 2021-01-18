@@ -4,13 +4,16 @@ import com.example.app.dto.TicketDto;
 import com.example.app.exception.ticket.NoTicketFoundException;
 import com.example.app.mapper.TicketMapper;
 import com.example.app.model.Play;
+import com.example.app.model.Theater;
 import com.example.app.model.Ticket;
+import com.example.app.repository.TheaterRepository;
 import com.example.app.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,9 @@ public class TicketService {
 
     @Autowired
     private TicketMapper ticketMapper;
+
+    @Autowired
+    private TheaterRepository theaterRepository;
 
     public List<TicketDto> getAll() throws NoTicketFoundException {
 
@@ -37,10 +43,14 @@ public class TicketService {
     public void generateTickets(Play play) {
 
         List<TicketDto> ticketDtos = new ArrayList<>();
-        Long theaterId = play.getTheater().getId();
-        Long playId = play.getId();
-        Long numberOfSeats = play.getTheater().getNumberOfSeats();
 
+        Long playId = play.getId();
+        Long theaterId = play.getTheater().getId();
+
+        Optional<Theater> optionalTheater = theaterRepository.findById(theaterId);
+        Theater theater = optionalTheater.get();
+
+        Long numberOfSeats = theater.getNumberOfSeats();
 
         for (int i = 0; i < numberOfSeats; i++) {
             TicketDto ticketDto = new TicketDto();
@@ -60,12 +70,17 @@ public class TicketService {
 
     private void saveTickets(List<TicketDto> ticketDtos) {
 
-        List<Ticket> tickets = ticketDtos.stream()
-                .map(ticketDto -> ticketMapper.dtoToModel(ticketDto))
-                .collect(Collectors.toList());
-
-        for (Ticket ticket : tickets) {
-            ticketRepository.save(ticket);
+        for (TicketDto ticketDto : ticketDtos) {
+            save(ticketDto);
         }
+    }
+
+    public TicketDto save(TicketDto ticketDto) {
+
+        Ticket ticket = ticketMapper.dtoToModel(ticketDto);
+        if (ticketDto.getCustomerId() == null)
+            ticket.setCustomer(null);
+        ticket = ticketRepository.save(ticket);
+        return ticketMapper.modelToDto(ticket);
     }
 }

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class TheaterDto {
 
     private Long id;
+
     private String name;
+
     private Long numberOfSeats;
 }
