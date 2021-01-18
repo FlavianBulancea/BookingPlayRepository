@@ -64,7 +64,6 @@ public class TicketService {
         for (int i = 0; i < numberOfSeats / 4; i++) {
             ticketDtos.get(i).setPrice((float) 24.99);
         }
-
         saveTickets(ticketDtos);
     }
 
