@@ -1,6 +1,7 @@
 package com.example.app.service;
 
 import com.example.app.dto.TicketDto;
+import com.example.app.exception.ticket.InvalidTicketException;
 import com.example.app.exception.ticket.NoTicketFoundException;
 import com.example.app.mapper.TicketMapper;
 import com.example.app.model.Customer;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +62,7 @@ public class TicketService {
 
             ticketDtos.get(i).setTheaterId(theaterId);
             ticketDtos.get(i).setPlayId(playId);
-            ticketDtos.get(i).setSeatNumber((long) i+1);
+            ticketDtos.get(i).setSeatNumber((long) i + 1);
             ticketDtos.get(i).setPrice((float) 14.99);
         }
         for (int i = 0; i < numberOfSeats / 4; i++) {
@@ -72,26 +72,30 @@ public class TicketService {
         return ticketDtos;
     }
 
-    public void saveTickets(List<TicketDto> ticketDtos) {
+    public void saveTickets(List<TicketDto> ticketDtos) throws InvalidTicketException{
 
         for (TicketDto ticketDto : ticketDtos) {
             save(ticketDto);
         }
     }
 
-    public TicketDto save(TicketDto ticketDto) {
+    public TicketDto save(TicketDto ticketDto) throws InvalidTicketException {
 
         Ticket ticket = ticketMapper.dtoToModel(ticketDto);
 
         if (ticketDto.getCustomerId() == null)
             ticket.setCustomer(null);
 
+        if (ticketDto.getPlayId() == null || ticketDto.getTheaterId() == null
+                || ticketDto.getPrice() == null || ticketDto.getSeatNumber() == null)
+            throw new InvalidTicketException();
+
         ticket = ticketRepository.save(ticket);
-        
+
         return ticketMapper.modelToDto(ticket);
     }
 
-    public TicketDto update(Long ticketId, Long customerId){
+    public TicketDto update(Long ticketId, Long customerId) {
 
         Customer customer = customerRepository.getOne(customerId);
         Ticket ticket = ticketRepository.getOne(ticketId);

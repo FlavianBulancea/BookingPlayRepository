@@ -3,6 +3,7 @@ package com.example.app.controller;
 import com.example.app.dto.PlayDto;
 import com.example.app.exception.InvalidNameException;
 import com.example.app.exception.play.NoPlayFoundException;
+import com.example.app.exception.ticket.InvalidTicketException;
 import com.example.app.service.PlayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +47,7 @@ public class PlayController {
 
         try {
             return new ResponseEntity<>(playService.save(playDto), HttpStatus.OK);
-        } catch (InvalidNameException e) {
+        } catch (InvalidNameException | InvalidTicketException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
