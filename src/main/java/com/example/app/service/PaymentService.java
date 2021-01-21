@@ -14,6 +14,7 @@ import com.example.app.util.PhoneNumberValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,16 +48,18 @@ public class PaymentService {
     public PaymentDto save(PaymentInformationDto paymentInformationDto) throws InvalidPhoneNumberException, InvalidEmailException, InvalidNameException{
 
         CustomerDto customerDto = paymentInformationDto.getCustomerDto();
-        PaymentDto paymentDto = paymentInformationDto.getPaymentDto();
-        TicketDto ticketDto = paymentInformationDto.getTicketDto();
+        Long ticketId = paymentInformationDto.getTicketId();
+        Timestamp dateTime = paymentInformationDto.getDateTime();
 
-        try {
-            customerService.saveOrUpdate(customerDto);
-        } catch (InvalidNameException | InvalidEmailException | InvalidPhoneNumberException e) {
-            e.printStackTrace();
-        }
+        customerDto = customerService.saveOrUpdate(customerDto);
 
-        ticketService.save(ticketDto);
+        TicketDto ticketDto = ticketService.update(ticketId, customerDto.getId());
+
+        PaymentDto paymentDto = new PaymentDto();
+        paymentDto.setCustomerId(customerDto.getId());
+        paymentDto.setTicketId(ticketDto.getId());
+        paymentDto.setAmount(ticketDto.getPrice());
+        paymentDto.setDateTime(dateTime);
 
         Payment payment = paymentMapper.dtoToModel(paymentDto);
         paymentRepository.save(payment);

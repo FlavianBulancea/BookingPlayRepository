@@ -19,5 +19,5 @@ public interface TicketMapper {
             @Mapping(source = "theater.id", target = "theaterId"),
             @Mapping(source = "play.id", target = "playId")
     })
-    TicketDto modelToDto(Ticket category);
+    TicketDto modelToDto(Ticket ticket);
 }

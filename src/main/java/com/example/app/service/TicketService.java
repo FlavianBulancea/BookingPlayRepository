@@ -3,9 +3,11 @@ package com.example.app.service;
 import com.example.app.dto.TicketDto;
 import com.example.app.exception.ticket.NoTicketFoundException;
 import com.example.app.mapper.TicketMapper;
+import com.example.app.model.Customer;
 import com.example.app.model.Play;
 import com.example.app.model.Theater;
 import com.example.app.model.Ticket;
+import com.example.app.repository.CustomerRepository;
 import com.example.app.repository.TheaterRepository;
 import com.example.app.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class TicketService {
     @Autowired
     private TheaterRepository theaterRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     public List<TicketDto> getAll() throws NoTicketFoundException {
 
         List<TicketDto> ticketDtos = ticketRepository.findAll().stream()
@@ -47,8 +52,7 @@ public class TicketService {
         Long playId = play.getId();
         Long theaterId = play.getTheater().getId();
 
-        Optional<Theater> optionalTheater = theaterRepository.findById(theaterId);
-        Theater theater = optionalTheater.get();
+        Theater theater = theaterRepository.getOne(theaterId);
 
         Long numberOfSeats = theater.getNumberOfSeats();
 
@@ -84,6 +88,18 @@ public class TicketService {
 
         ticket = ticketRepository.save(ticket);
         
+        return ticketMapper.modelToDto(ticket);
+    }
+
+    public TicketDto update(Long ticketId, Long customerId){
+
+        Customer customer = customerRepository.getOne(customerId);
+        Ticket ticket = ticketRepository.getOne(ticketId);
+
+        ticket.setCustomer(customer);
+
+        ticketRepository.save(ticket);
+
         return ticketMapper.modelToDto(ticket);
     }
 }
