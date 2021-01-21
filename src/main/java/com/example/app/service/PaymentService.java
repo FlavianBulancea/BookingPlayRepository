@@ -7,10 +7,7 @@ import com.example.app.exception.customer.InvalidPhoneNumberException;
 import com.example.app.exception.payment.NoPaymentFoundException;
 import com.example.app.mapper.PaymentMapper;
 import com.example.app.model.Payment;
-import com.example.app.model.Play;
 import com.example.app.repository.PaymentRepository;
-import com.example.app.util.EmailValidation;
-import com.example.app.util.PhoneNumberValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
