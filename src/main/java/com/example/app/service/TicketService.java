@@ -40,7 +40,7 @@ public class TicketService {
         return ticketDtos;
     }
 
-    public void generateTickets(Play play) {
+    public List<TicketDto> generateTickets(Play play) {
 
         List<TicketDto> ticketDtos = new ArrayList<>();
 
@@ -58,16 +58,17 @@ public class TicketService {
 
             ticketDtos.get(i).setTheaterId(theaterId);
             ticketDtos.get(i).setPlayId(playId);
-            ticketDtos.get(i).setSeatNumber((long) i);
+            ticketDtos.get(i).setSeatNumber((long) i+1);
             ticketDtos.get(i).setPrice((float) 14.99);
         }
         for (int i = 0; i < numberOfSeats / 4; i++) {
             ticketDtos.get(i).setPrice((float) 24.99);
         }
-        saveTickets(ticketDtos);
+
+        return ticketDtos;
     }
 
-    private void saveTickets(List<TicketDto> ticketDtos) {
+    public void saveTickets(List<TicketDto> ticketDtos) {
 
         for (TicketDto ticketDto : ticketDtos) {
             save(ticketDto);
@@ -77,9 +78,12 @@ public class TicketService {
     public TicketDto save(TicketDto ticketDto) {
 
         Ticket ticket = ticketMapper.dtoToModel(ticketDto);
+
         if (ticketDto.getCustomerId() == null)
             ticket.setCustomer(null);
+
         ticket = ticketRepository.save(ticket);
+        
         return ticketMapper.modelToDto(ticket);
     }
 }

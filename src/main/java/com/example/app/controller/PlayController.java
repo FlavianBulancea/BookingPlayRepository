@@ -1,6 +1,7 @@
 package com.example.app.controller;
 
 import com.example.app.dto.PlayDto;
+import com.example.app.exception.InvalidNameException;
 import com.example.app.exception.play.NoPlayFoundException;
 import com.example.app.service.PlayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,10 @@ public class PlayController {
     @PostMapping
     public ResponseEntity<PlayDto> save(@RequestBody PlayDto playDto){
 
-        return new ResponseEntity<>(playService.save(playDto), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(playService.save(playDto), HttpStatus.OK);
+        } catch (InvalidNameException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 }

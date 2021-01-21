@@ -1,8 +1,11 @@
 package com.example.app.service;
 
+import com.example.app.dto.PlayDto;
 import com.example.app.dto.TheaterDto;
+import com.example.app.exception.InvalidNameException;
 import com.example.app.exception.theater.NoTheaterFoundException;
 import com.example.app.mapper.TheaterMapper;
+import com.example.app.model.Play;
 import com.example.app.model.Theater;
 import com.example.app.repository.TheaterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +33,16 @@ public class TheaterService {
             throw new NoTheaterFoundException();
 
         return theaterDtos;
+    }
+
+    public TheaterDto save(TheaterDto theaterDto) throws InvalidNameException {
+
+        if(theaterDto.getName().length() == 0)
+            throw new InvalidNameException();
+
+        Theater theater = theaterMapper.dtoToModel(theaterDto);
+        theater = theaterRepository.save(theater);
+
+        return theaterMapper.modelToDto(theater);
     }
 }

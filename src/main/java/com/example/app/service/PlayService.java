@@ -1,6 +1,8 @@
 package com.example.app.service;
 
 import com.example.app.dto.PlayDto;
+import com.example.app.dto.TicketDto;
+import com.example.app.exception.InvalidNameException;
 import com.example.app.exception.play.NoPlayFoundException;
 import com.example.app.mapper.PlayMapper;
 import com.example.app.model.Play;
@@ -47,12 +49,16 @@ public class PlayService {
         return playDtos;
     }
 
-    public PlayDto save(PlayDto playDto) {              //throws any error (name etc..) ???
+    public PlayDto save(PlayDto playDto) throws InvalidNameException {
+
+        if(playDto.getName().length() == 0)
+            throw new InvalidNameException();
 
         Play play = playMapper.dtoToModel(playDto);
         play = playRepository.save(play);
 
-        ticketService.generateTickets(play);
+        List<TicketDto> ticketDtos = ticketService.generateTickets(play);
+        ticketService.saveTickets(ticketDtos);
 
         return playMapper.modelToDto(play);
     }
