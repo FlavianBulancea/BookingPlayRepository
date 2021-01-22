@@ -1,7 +1,6 @@
 package com.example.app.service;
 
 import com.example.app.dto.TicketDto;
-import com.example.app.exception.ticket.InvalidTicketException;
 import com.example.app.exception.ticket.NoTicketFoundException;
 import com.example.app.mapper.TicketMapper;
 import com.example.app.model.Customer;
@@ -9,6 +8,7 @@ import com.example.app.model.Play;
 import com.example.app.model.Theater;
 import com.example.app.model.Ticket;
 import com.example.app.repository.CustomerRepository;
+import com.example.app.repository.PlayRepository;
 import com.example.app.repository.TheaterRepository;
 import com.example.app.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,9 @@ public class TicketService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PlayRepository playRepository;
 
     public List<TicketDto> getAll() throws NoTicketFoundException {
 
@@ -72,23 +75,18 @@ public class TicketService {
         return ticketDtos;
     }
 
-    public void saveTickets(List<TicketDto> ticketDtos) throws InvalidTicketException{
+    public void saveTickets(List<TicketDto> ticketDtos){
 
         for (TicketDto ticketDto : ticketDtos) {
             save(ticketDto);
         }
     }
 
-    public TicketDto save(TicketDto ticketDto) throws InvalidTicketException {
+    public TicketDto save(TicketDto ticketDto) {
 
         Ticket ticket = ticketMapper.dtoToModel(ticketDto);
 
-        if (ticketDto.getCustomerId() == null)
-            ticket.setCustomer(null);
-
-        if (ticketDto.getPlayId() == null || ticketDto.getTheaterId() == null
-                || ticketDto.getPrice() == null || ticketDto.getSeatNumber() == null)
-            throw new InvalidTicketException();
+        ticket.setCustomer(null);
 
         ticket = ticketRepository.save(ticket);
 

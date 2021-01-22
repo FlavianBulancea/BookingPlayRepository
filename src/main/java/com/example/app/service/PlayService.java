@@ -4,7 +4,6 @@ import com.example.app.dto.PlayDto;
 import com.example.app.dto.TicketDto;
 import com.example.app.exception.InvalidNameException;
 import com.example.app.exception.play.NoPlayFoundException;
-import com.example.app.exception.ticket.InvalidTicketException;
 import com.example.app.mapper.PlayMapper;
 import com.example.app.model.Play;
 import com.example.app.repository.PlayRepository;
@@ -50,7 +49,7 @@ public class PlayService {
         return playDtos;
     }
 
-    public PlayDto save(PlayDto playDto) throws InvalidNameException, InvalidTicketException {
+    public PlayDto save(PlayDto playDto) throws InvalidNameException {
 
         if(playDto.getName().length() == 0)
             throw new InvalidNameException();

@@ -1,7 +1,6 @@
 package com.example.app.controller;
 
 import com.example.app.dto.TicketDto;
-import com.example.app.exception.ticket.InvalidTicketException;
 import com.example.app.exception.ticket.NoTicketFoundException;
 import com.example.app.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +31,6 @@ public class TicketController {
     @PostMapping
     public ResponseEntity<TicketDto> save(@RequestBody TicketDto ticketDto){
 
-        try {
             return new ResponseEntity<>(ticketService.save(ticketDto), HttpStatus.OK);
-        } catch (InvalidTicketException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
     }
 }
