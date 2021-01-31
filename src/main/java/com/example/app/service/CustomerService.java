@@ -37,7 +37,8 @@ public class CustomerService {
         return customerDtos;
     }
 
-    public CustomerDto saveOrUpdate(CustomerDto customerDto) throws InvalidNameException, InvalidEmailException, InvalidPhoneNumberException {
+    public CustomerDto saveOrUpdate(CustomerDto customerDto) throws InvalidNameException,
+            InvalidEmailException, InvalidPhoneNumberException {
 
         if (!EmailValidation.isTrue(customerDto.getEmail()))
             throw new InvalidEmailException();
