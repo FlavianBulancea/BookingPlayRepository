@@ -32,7 +32,7 @@ public class PaymentService {
 
     public List<PaymentDto> getAll() throws NoPaymentFoundException {
 
-        List<PaymentDto> paymentDtos = paymentRepository.findAll().stream()
+        List<PaymentDto> paymentDtos = paymentRepository.findByOrderByDateTimeAsc().stream()
                 .map(payment -> paymentMapper.modelToDto(payment))
                 .collect(Collectors.toList());
 

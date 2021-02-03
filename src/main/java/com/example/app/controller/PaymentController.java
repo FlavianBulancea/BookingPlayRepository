@@ -23,7 +23,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping
-    public ResponseEntity<List<PaymentDto>> getAll() {
+    public ResponseEntity<List<PaymentDto>> getAllSorted() {
 
         try {
             return new ResponseEntity<>(paymentService.getAll(), new HttpHeaders(), HttpStatus.OK);
