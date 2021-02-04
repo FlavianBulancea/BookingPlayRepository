@@ -1,5 +1,6 @@
 package com.example.app.controller;
 
+import com.example.app.dto.IdDto;
 import com.example.app.dto.PlayDto;
 import com.example.app.exception.InvalidNameException;
 import com.example.app.exception.play.NoPlayFoundException;
@@ -52,10 +53,10 @@ public class PlayController {
     }
 
     @DeleteMapping
-    public ResponseEntity<PlayDto> delete(@RequestBody Long id){
+    public ResponseEntity<PlayDto> delete(@RequestBody IdDto idDto){
 
         try {
-            playService.delete(id);
+            playService.delete(idDto.getId());
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (NoPlayFoundException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

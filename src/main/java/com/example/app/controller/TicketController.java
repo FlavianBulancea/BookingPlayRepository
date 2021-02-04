@@ -27,10 +27,4 @@ public class TicketController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
-
-    @PostMapping
-    public ResponseEntity<TicketDto> save(@RequestBody TicketDto ticketDto){
-
-            return new ResponseEntity<>(ticketService.save(ticketDto), HttpStatus.OK);
-    }
 }

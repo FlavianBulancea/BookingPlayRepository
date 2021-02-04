@@ -37,7 +37,8 @@ public class PaymentController {
     public ResponseEntity<PaymentDto> save(@RequestBody PaymentInformationDto paymentInformationDto) {
 
         try {
-            return new ResponseEntity<>(paymentService.save(paymentInformationDto), HttpStatus.OK);
+            paymentService.save(paymentInformationDto);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (InvalidPhoneNumberException | InvalidNameException | InvalidEmailException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

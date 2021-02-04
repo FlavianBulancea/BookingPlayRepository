@@ -42,25 +42,26 @@ public class PaymentService {
         return paymentDtos;
     }
 
-    public PaymentDto save(PaymentInformationDto paymentInformationDto) throws InvalidPhoneNumberException, InvalidEmailException, InvalidNameException{
+    public void save(PaymentInformationDto paymentInformationDto) throws InvalidPhoneNumberException, InvalidEmailException, InvalidNameException{
 
-        CustomerDto customerDto = paymentInformationDto.getCustomerDto();
-        Long ticketId = paymentInformationDto.getTicketId();
         Timestamp dateTime = paymentInformationDto.getDateTime();
 
+        CustomerDto customerDto = paymentInformationDto.getCustomerDto();
         customerDto = customerService.saveOrUpdate(customerDto);
 
-        TicketDto ticketDto = ticketService.update(ticketId, customerDto.getId());
+        for (int i = 0; i < paymentInformationDto.getTicketIds().size(); i++) {
 
-        PaymentDto paymentDto = new PaymentDto();
-        paymentDto.setCustomerId(customerDto.getId());
-        paymentDto.setTicketId(ticketDto.getId());
-        paymentDto.setAmount(ticketDto.getPrice());
-        paymentDto.setDateTime(dateTime);
+            Long ticketId = paymentInformationDto.getTicketIds().get(i);
+            TicketDto ticketDto = ticketService.update(ticketId, customerDto.getId());
 
-        Payment payment = paymentMapper.dtoToModel(paymentDto);
-        paymentRepository.save(payment);
+            PaymentDto paymentDto = new PaymentDto();
+            paymentDto.setCustomerId(customerDto.getId());
+            paymentDto.setTicketId(ticketDto.getId());
+            paymentDto.setAmount(ticketDto.getPrice());
+            paymentDto.setDateTime(dateTime);
 
-        return paymentMapper.modelToDto(payment);
+            Payment payment = paymentMapper.dtoToModel(paymentDto);
+            paymentRepository.save(payment);
+        }
     }
 }
